@@ -23,6 +23,14 @@ class RightbrosDataScrapper:
         # Converting the requests object to bs4 object to do the operations
         soup = bs4.BeautifulSoup(req.text, 'lxml')
         return soup
+
+    def select_title(self):
+        """
+        Select the Title of the page
+        """
+        raw = self.opener()
+        data = raw.find('title')
+        return data.text
     
     def select_data(self):
         """
@@ -35,6 +43,27 @@ class RightbrosDataScrapper:
         data = raw.find_all('a', href=True)
         return data
 
+    def assign_data(self):
+        """
+        Assign the Data in separate list
+        """
+        data = self.select_data()
+        link_data = list()
+        for i in data:
+            flow = i['href']
+            if flow.startswith('https://') or flow.startswith('http://'):
+                link_data.append(flow)
+            elif flow.startswith('/wiki/File:'):
+                new_flow = "https://en.wikipedia.org" + str(flow)
+                link_data.append(new_flow)
+            elif flow.startswith('//'):
+                new_flow = "https:" + str(flow)
+                link_data.append(new_flow)
+            elif flow.startswith('/') or flow.startswith('#'):
+                new_flow = "https://en.wikipedia.org/wiki/Black_hole" + str(flow)
+                link_data.append(new_flow)
+        return link_data
+
     def write_data(self):
         """
         Write Data to the file
@@ -43,7 +72,7 @@ class RightbrosDataScrapper:
         *************************************************************
         """
         data = self.select_data()
-        f = open(self.file, "w+")
+        f = open(self.file, "a+")
         for i in data:
             flow = i['href']
             if flow.startswith('https://') or flow.startswith('http://'):
@@ -71,4 +100,4 @@ class RightbrosDataScrapper:
 # """
 # Need to call only one method of the class write_data()
 # """
-# obj.write_data()
+# print(obj.assign_data())
