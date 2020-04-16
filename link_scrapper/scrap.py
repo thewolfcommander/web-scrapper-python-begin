@@ -44,20 +44,16 @@ class RightbrosDataScrapper:
         # Converting the requests object to bs4 object to do the operations
         soup = bs4.BeautifulSoup(req.text, 'lxml')
         return soup
-
-    def getSelector(self):
-        """
-        Take input from the User, which selector of data he/she wants to scrap
-        """
-        selector = str(input('Enter a selector ... '))
-        self.selector = selector
     
     def select_data(self):
         """
         Select the Target Data which user wants to scrap
+        *************************************************************
+        WARNING: Configured to scrap all links
+        *************************************************************
         """
         raw = self.opener()
-        data = raw.find_all(self.selector)
+        data = raw.find_all('a', href=True)
         return data
 
     def write_data(self):
@@ -67,7 +63,7 @@ class RightbrosDataScrapper:
         WARNING: Configured to scrap all links
         *************************************************************
         """
-        data = select_data()
+        data = self.select_data()
         f = open(self.file, "w+")
         for i in data:
             flow = i['href']
@@ -89,6 +85,11 @@ class RightbrosDataScrapper:
         return "Scrapping Done. Please check the file."
 
     
-url = "https://en.wikipedia.org/wiki/Black_hole"
-file_path = "link_scrapper/wiki.txt"
+url = "https://en.wikipedia.org/wiki/Computer"
+file_path = "link_scrapper/computer.txt"
 obj = RightbrosDataScrapper(url, file_path)
+
+"""
+Need to call only one method of the class write_data()
+"""
+obj.write_data()
