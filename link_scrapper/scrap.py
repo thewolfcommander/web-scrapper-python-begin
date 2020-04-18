@@ -84,10 +84,10 @@ class RightbrosDataScrapper:
                 new_flow = "https:" + str(flow)
                 f.write(new_flow + "\n")
             elif flow.startswith('/') or flow.startswith('#'):
-                new_flow = "https://en.wikipedia.org/wiki/Black_hole" + str(flow)
+                new_flow = self.url + str(flow)
                 f.write(new_flow + "\n")
             else:
-                new_flow = "https://en.wikipedia.org/wiki/Black_hole/" + str(flow)
+                new_flow = self.url + str(flow)
                 f.write(new_flow + "\n")
         f.close()
         return "Scrapping Done. Please check the file."
